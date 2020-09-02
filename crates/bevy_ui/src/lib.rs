@@ -1,27 +1,14 @@
-mod anchors;
 pub mod entity;
-mod flex;
-mod focus;
-mod margins;
 mod node;
 mod render;
 pub mod update;
 pub mod widget;
 
-pub use anchors::*;
-pub use flex::*;
-pub use focus::*;
-pub use margins::*;
 pub use node::*;
 pub use render::*;
 
 pub mod prelude {
-    pub use crate::{
-        entity::*,
-        node::*,
-        widget::{Button, Text},
-        Anchors, Interaction, Margins,
-    };
+    pub use crate::{entity::*, node::*, widget::Text};
 }
 
 use bevy_app::prelude::*;
@@ -38,14 +25,11 @@ pub mod stage {
 
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut AppBuilder) {
-        app.init_resource::<FlexSurface>()
-            .add_stage_before(bevy_app::stage::POST_UPDATE, stage::UI)
-            .add_system_to_stage(bevy_app::stage::PRE_UPDATE, ui_focus_system.system())
+        app.add_stage_before(bevy_app::stage::POST_UPDATE, stage::UI)
             // add these stages to front because these must run before transform update systems
             .add_system_to_stage(stage::UI, widget::text_system.system())
             .add_system_to_stage(stage::UI, widget::image_node_system.system())
             .add_system_to_stage(stage::UI, ui_z_system.system())
-            .add_system_to_stage(stage::UI, flex_node_system.system())
             .add_system_to_stage(bevy_render::stage::DRAW, widget::draw_text_system.system());
 
         let resources = app.resources();

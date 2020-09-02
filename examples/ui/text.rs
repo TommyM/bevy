@@ -30,10 +30,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         .spawn(UiCameraComponents::default())
         // texture
         .spawn(TextComponents {
-            style: Style {
-                align_self: AlignSelf::FlexEnd,
-                ..Default::default()
-            },
             text: Text {
                 value: "FPS:".to_string(),
                 font: font_handle,

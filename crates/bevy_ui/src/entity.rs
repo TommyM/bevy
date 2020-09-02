@@ -1,8 +1,8 @@
 use super::Node;
 use crate::{
     render::UI_PIPELINE_HANDLE,
-    widget::{Button, Image, Text},
-    CalculatedSize, FocusPolicy, Interaction, Style,
+    widget::{Image, Text},
+    CalculatedSize,
 };
 use bevy_asset::Handle;
 use bevy_ecs::Bundle;
@@ -21,7 +21,6 @@ use bevy_transform::{
 #[derive(Bundle, Clone)]
 pub struct NodeComponents {
     pub node: Node,
-    pub style: Style,
     pub mesh: Handle<Mesh>, // TODO: maybe abstract this out
     pub material: Handle<ColorMaterial>,
     pub draw: Draw,
@@ -53,7 +52,6 @@ impl Default for NodeComponents {
                 },
             )]),
             node: Default::default(),
-            style: Default::default(),
             material: Default::default(),
             draw: Default::default(),
             transform: Default::default(),
@@ -65,7 +63,6 @@ impl Default for NodeComponents {
 #[derive(Bundle, Clone)]
 pub struct ImageComponents {
     pub node: Node,
-    pub style: Style,
     pub image: Image,
     pub calculated_size: CalculatedSize,
     pub mesh: Handle<Mesh>, // TODO: maybe abstract this out
@@ -101,7 +98,6 @@ impl Default for ImageComponents {
             node: Default::default(),
             image: Default::default(),
             calculated_size: Default::default(),
-            style: Default::default(),
             material: Default::default(),
             draw: Default::default(),
             transform: Default::default(),
@@ -113,11 +109,9 @@ impl Default for ImageComponents {
 #[derive(Bundle, Clone)]
 pub struct TextComponents {
     pub node: Node,
-    pub style: Style,
     pub draw: Draw,
     pub text: Text,
     pub calculated_size: CalculatedSize,
-    pub focus_policy: FocusPolicy,
     pub transform: Transform,
     pub local_transform: LocalTransform,
 }
@@ -125,7 +119,6 @@ pub struct TextComponents {
 impl Default for TextComponents {
     fn default() -> Self {
         TextComponents {
-            focus_policy: FocusPolicy::Pass,
             draw: Draw {
                 is_transparent: true,
                 ..Default::default()
@@ -133,57 +126,6 @@ impl Default for TextComponents {
             text: Default::default(),
             node: Default::default(),
             calculated_size: Default::default(),
-            style: Default::default(),
-            transform: Default::default(),
-            local_transform: Default::default(),
-        }
-    }
-}
-
-#[derive(Bundle, Clone)]
-pub struct ButtonComponents {
-    pub node: Node,
-    pub button: Button,
-    pub style: Style,
-    pub interaction: Interaction,
-    pub focus_policy: FocusPolicy,
-    pub mesh: Handle<Mesh>, // TODO: maybe abstract this out
-    pub material: Handle<ColorMaterial>,
-    pub draw: Draw,
-    pub render_pipelines: RenderPipelines,
-    pub transform: Transform,
-    pub local_transform: LocalTransform,
-}
-
-impl Default for ButtonComponents {
-    fn default() -> Self {
-        ButtonComponents {
-            button: Button,
-            mesh: QUAD_HANDLE,
-            render_pipelines: RenderPipelines::from_pipelines(vec![RenderPipeline::specialized(
-                UI_PIPELINE_HANDLE,
-                PipelineSpecialization {
-                    dynamic_bindings: vec![
-                        // Transform
-                        DynamicBinding {
-                            bind_group: 1,
-                            binding: 0,
-                        },
-                        // Node_size
-                        DynamicBinding {
-                            bind_group: 1,
-                            binding: 1,
-                        },
-                    ],
-                    ..Default::default()
-                },
-            )]),
-            interaction: Default::default(),
-            focus_policy: Default::default(),
-            node: Default::default(),
-            style: Default::default(),
-            material: Default::default(),
-            draw: Default::default(),
             transform: Default::default(),
             local_transform: Default::default(),
         }
